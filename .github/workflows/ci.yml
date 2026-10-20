@@ -1,0 +1,98 @@
+name: ci
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  commit-identity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Blocked identities must not appear in history
+        env:
+          PATTERN: ${{ vars.BLOCKED_AUTHOR_PATTERN }}
+        run: |
+          if [ -z "$PATTERN" ]; then
+            echo "BLOCKED_AUTHOR_PATTERN variable not set - skipping check"; exit 0
+          fi
+          bad=$(git log --format='%H %an <%ae>' | grep -iE "$PATTERN" || true)
+          if [ -n "$bad" ]; then
+            echo "Commits with blocked identity found - rewrite to Sanestly <dev@sanestly.com>:"; echo "$bad"; exit 1
+          fi
+
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r typecheck
+      - run: pnpm -r lint
+      - run: pnpm -r build
+      - run: pnpm -r test
+      - name: Validate pack artifacts
+        run: |
+          mkdir -p /tmp/pkgs
+          for p in packages/* apps/cli; do (cd "$p" && pnpm pack --pack-destination /tmp/pkgs >/dev/null); done
+          ls -la /tmp/pkgs
+          test "$(ls /tmp/pkgs/*.tgz | wc -l)" -eq 6
+
+  fixtures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: npx playwright install chromium
+      - name: Regenerate fixtures and check drift
+        run: |
+          node scripts/generate-fixtures.mjs
+          pnpm -r build
+          pnpm --filter @sanestly/run-diff test
+        env:
+          CI: "true"
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Audit dependencies (fails on critical/high)
+        run: pnpm audit --audit-level=high
+
+  e2e:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r build
+      - run: npx playwright install ${{ matrix.browser }}
+      - run: node scripts/e2e-web.mjs
+        env:
+          E2E_BROWSER: ${{ matrix.browser }}

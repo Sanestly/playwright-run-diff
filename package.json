@@ -1,0 +1,40 @@
+{
+  "name": "playwright-run-diff",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Compare two Playwright test traces, locate behavioral regressions, and share a reproducible, privacy-aware diff report.",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint . --max-warnings=20",
+    "dev:web": "pnpm --filter @sanestly/web dev",
+    "fixtures:generate": "node scripts/generate-fixtures.mjs",
+    "fixtures:test-runner": "node scripts/generate-test-runner-fixture.mjs",
+    "test:e2e": "node scripts/e2e-web.mjs",
+    "test:e2e:all": "E2E_BROWSER=chromium node scripts/e2e-web.mjs && E2E_BROWSER=firefox node scripts/e2e-web.mjs && E2E_BROWSER=webkit node scripts/e2e-web.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^22.10.0",
+    "eslint": "^10.13.0",
+    "fflate": "^0.8.3",
+    "globals": "^17.13.0",
+    "jpeg-js": "^0.4.4",
+    "pngjs": "^7.0.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.71.2",
+    "vitest": "^5.0.5"
+  },
+  "packageManager": "pnpm@11.9.0",
+  "author": "Sanestly <dev@sanestly.com> (https://sanestly.com)",
+  "homepage": "https://sanestly.com",
+  "bugs": "https://github.com/Sanestly/playwright-run-diff/issues"
+}

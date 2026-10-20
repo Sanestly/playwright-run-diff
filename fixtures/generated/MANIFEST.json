@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-10-18T20:30:00Z",
+  "playwrightVersion": "1.64.1",
+  "browser": "chromium",
+  "pairs": {
+    "sample-a": {
+      "baseline": "sample-a/baseline.zip",
+      "candidate": "sample-a/candidate.zip",
+      "producer": "browserContext.tracing",
+      "expectedDifferences": [
+        "page title changed",
+        "extra click action added",
+        "/api/data returns 500 instead of 200",
+        "console.error in candidate",
+        "screenshots differ where candidate changed"
+      ],
+      "regenerate": "pnpm fixtures"
+    },
+    "identical": {
+      "baseline": "identical/baseline.zip",
+      "candidate": "identical/candidate.zip",
+      "producer": "browserContext.tracing",
+      "expectedDifferences": [],
+      "note": "Two runs of identical code; only timing noise expected.",
+      "regenerate": "pnpm fixtures"
+    },
+    "v1.60": {
+      "baseline": "v1.60/baseline.zip",
+      "candidate": "v1.60/candidate.zip",
+      "producer": "browserContext.tracing",
+      "playwrightVersion": "1.60.0",
+      "note": "Same scenario recorded with playwright-core@1.60.0; screencast frames stored under resources/ instead of screencast/.",
+      "regenerate": "install playwright-core@1.60.0 into a scratch dir with a matching browser, then run scripts/generate-fixtures.mjs with PW_MODULE=/path/to/playwright-core/index.mjs and FIXTURE_OUT=fixtures/generated/v1.60"
+    },
+    "test-runner": {
+      "baseline": "test-runner/baseline.zip",
+      "candidate": "test-runner/candidate.zip",
+      "producer": "@playwright/test with use: { trace: 'on' }",
+      "browser": "chromium",
+      "note": "Multi-stream archive: test.trace (test steps, hooks, expect) plus N-trace.* context streams; screenshots under screencast/. failing-*.zip contains an expected-fail test trace (failed assertion steps).",
+      "extra": ["test-runner/failing-baseline.zip", "test-runner/failing-candidate.zip"],
+      "regenerate": "node scripts/generate-test-runner-fixture.mjs"
+    },
+    "firefox": {
+      "baseline": "firefox/sample-a/baseline.zip",
+      "identical": "firefox/identical",
+      "producer": "browserContext.tracing",
+      "browser": "firefox",
+      "playwrightVersion": "1.64.1",
+      "note": "Firefox screencast frames carry ~1.6% JPEG noise between identical runs; sub-2% pixel diffs are reported at info severity.",
+      "regenerate": "FIXTURE_BROWSER=firefox FIXTURE_OUT=fixtures/generated/firefox node scripts/generate-fixtures.mjs"
+    },
+    "webkit": {
+      "baseline": "webkit/sample-a/baseline.zip",
+      "identical": "webkit/identical",
+      "producer": "browserContext.tracing",
+      "browser": "webkit",
+      "playwrightVersion": "1.64.1",
+      "regenerate": "FIXTURE_BROWSER=webkit FIXTURE_OUT=fixtures/generated/webkit node scripts/generate-fixtures.mjs"
+    },
+    "test-runner-firefox": {
+      "baseline": "test-runner-firefox/baseline.zip",
+      "candidate": "test-runner-firefox/candidate.zip",
+      "producer": "@playwright/test with use: { trace: 'on' }",
+      "browser": "firefox",
+      "regenerate": "FIXTURE_BROWSER=firefox FIXTURE_OUT=$PWD/fixtures/generated/test-runner-firefox node scripts/generate-test-runner-fixture.mjs"
+    },
+    "test-runner-webkit": {
+      "baseline": "test-runner-webkit/baseline.zip",
+      "candidate": "test-runner-webkit/candidate.zip",
+      "producer": "@playwright/test with use: { trace: 'on' }",
+      "browser": "webkit",
+      "regenerate": "FIXTURE_BROWSER=webkit FIXTURE_OUT=$PWD/fixtures/generated/test-runner-webkit node scripts/generate-test-runner-fixture.mjs"
+    }
+  }
+}

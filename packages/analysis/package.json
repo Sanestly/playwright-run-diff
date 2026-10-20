@@ -1,0 +1,40 @@
+{
+  "name": "@sanestly/analysis",
+  "version": "0.9.0-beta.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "lint": "echo \"lint: not configured\""
+  },
+  "dependencies": {
+    "@sanestly/contracts": "workspace:*",
+    "@sanestly/matcher": "workspace:*",
+    "pixelmatch": "^7.1.0"
+  },
+  "description": "Timing, network, console and pixel-diff analysis plus deterministic findings for two trace runs.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanestly/playwright-run-diff.git",
+    "directory": "packages/analysis"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Sanestly <dev@sanestly.com> (https://sanestly.com)",
+  "homepage": "https://sanestly.com",
+  "bugs": "https://github.com/Sanestly/playwright-run-diff/issues"
+}

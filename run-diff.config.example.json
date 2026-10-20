@@ -1,0 +1,21 @@
+{
+  "timing": {
+    "minAbsoluteMs": 100,
+    "minRelativeIncrease": 0.2
+  },
+  "match": {
+    "minimumConfidence": 0.6
+  },
+  "visuals": {
+    "maxPixelDiffRatio": 0.01,
+    "maskRects": []
+  },
+  "ignore": {
+    "urlPatterns": [
+      "analytics\\.example\\.com",
+      "googletagmanager|doubleclick|segment\\.io"
+    ],
+    "actionPatterns": [],
+    "responseHeaders": []
+  }
+}

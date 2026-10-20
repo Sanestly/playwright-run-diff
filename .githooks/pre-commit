@@ -1,0 +1,9 @@
+#!/bin/sh
+# Sanestly repos: commits must use the org identity, never personal accounts.
+REQUIRED_EMAIL="dev@sanestly.com"
+EMAIL="$(git config user.email || true)"
+if [ "$EMAIL" != "$REQUIRED_EMAIL" ]; then
+  echo "pre-commit: user.email is '$EMAIL', must be '$REQUIRED_EMAIL'." >&2
+  echo "Run: git config user.email $REQUIRED_EMAIL && git config user.name Sanestly" >&2
+  exit 1
+fi

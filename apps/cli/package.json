@@ -1,0 +1,53 @@
+{
+  "name": "@sanestly/run-diff",
+  "version": "0.9.0-beta.1",
+  "type": "module",
+  "bin": {
+    "run-diff": "./dist/bin.js",
+    "sanestly-run-diff": "./dist/bin.js"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "lint": "echo \"lint: not configured\""
+  },
+  "dependencies": {
+    "@sanestly/analysis": "workspace:*",
+    "@sanestly/contracts": "workspace:*",
+    "@sanestly/report": "workspace:*",
+    "@sanestly/trace-reader": "workspace:*",
+    "jpeg-js": "^0.4.4",
+    "pngjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/jpeg-js": "^0.3.7",
+    "@types/pngjs": "^6.0.5"
+  },
+  "description": "Compare two Playwright trace runs - find action, timing, network, console and visual regressions. Local-only processing, sanitized reports.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanestly/playwright-run-diff.git",
+    "directory": "apps/cli"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "playwright",
+    "trace",
+    "diff",
+    "regression",
+    "testing",
+    "ci"
+  ],
+  "author": "Sanestly <dev@sanestly.com> (https://sanestly.com)",
+  "homepage": "https://sanestly.com",
+  "bugs": "https://github.com/Sanestly/playwright-run-diff/issues"
+}
